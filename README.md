@@ -23,7 +23,7 @@ If specify, the process will not exit with failure until finish all tasks.
 #### -c, --configs [path]
 Specify configuration file path. default is `.uploadrc`.
 
-### --variables
+#### --variables
 
 example:
 
