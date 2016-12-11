@@ -1,5 +1,6 @@
 # config-upload
-upload file to s3 by configuration file
+
+Upload file to s3 by configuration file.
 
 ## Install
 
@@ -17,13 +18,15 @@ $ config-upload [options]
 ### options
 
 #### -n, --no-fail-fast
-if specific, the process will not exit with failure until finish all tasks
+If specify, the process will not exit with failure until finish all tasks.
 
 #### -c, --configs [path]
-specify configuration file path. default is `.uploadrc`
+Specify configuration file path. default is `.uploadrc`.
 
 ### --variables
+
 example:
+
 ```sh
 config-upload --variables '{"revision": "1.2.3"}'
 ```
@@ -31,7 +34,7 @@ config-upload --variables '{"revision": "1.2.3"}'
 ## Configurations
 
 ### dists
-list distination groups
+List distination groups.
 
 ```json
 {
@@ -52,13 +55,13 @@ Source object described below use this name to specify a distination.
 The way to upload. default support `s3`. If not specified, it will use group name as default.
 
 #### bucket
-Bucket's name of storage service
+Bucket's name of storage service.
 
 #### folder
-folder's path
+Folder's path.
 
 ### sources
-sources configurations are loaded by the defined array of hash.
+Sources configurations are loaded by the defined array of hash.
 
 ```json
 {
@@ -77,10 +80,10 @@ sources configurations are loaded by the defined array of hash.
 Group name described above.
 
 #### include
-Includes files that matching pattern. Using [glob]
+Includes files that matching pattern. Using [glob].
 
 #### exclude
-Excludes files that matching pattern. It takes priority over `include`. Using [glob]
+Excludes files that matching pattern. It takes priority over `include`. Using [glob].
 
 ### basic example
 ```json
@@ -128,8 +131,8 @@ Excludes files that matching pattern. It takes priority over `include`. Using [g
 ```
 
 ## TODO
-- [ ] Customizable file name of distination
-- [ ] Inject veriables from command to configurations
-- [ ] qiniu uploader
+- [ ] Customizable file name of distination.
+- [ ] Inject veriables from command to configurations.
+- [ ] Uploader of Qiniu.
 
 [glob]: https://en.wikipedia.org/wiki/Glob_(programming)
