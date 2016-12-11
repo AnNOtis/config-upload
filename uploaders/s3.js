@@ -17,19 +17,19 @@ const S3Uploader = function (options) {
 }
 
 S3Uploader.prototype.upload = function (source, folder) {
-  const uploadParams = { Key: '', Body: '' }
-  const fileStream = fs.createReadStream(source);
-  fileStream.on('error', function(err) {
+  const uploadParams = {Key: '', Body: ''}
+  const fileStream = fs.createReadStream(source)
+  fileStream.on('error', function (err) {
     throw err
-  });
-  uploadParams.Body = fileStream;
-  uploadParams.Key = (folder || this.options.folder || '') + '/' + path.basename(source);
+  })
+  uploadParams.Body = fileStream
+  uploadParams.Key = (folder || this.options.folder || '') + '/' + path.basename(source)
 
-  this.uploader.upload (uploadParams, function (err, data) {
+  this.uploader.upload(uploadParams, function (err, data) {
     if (err) {
       throw err
-    } if (data) {
-      console.log("Upload Success", data.Location);
+    } else if (data) {
+      console.log('Upload Success', data.Location)
     }
   })
 }

@@ -1,14 +1,14 @@
 const loadJsonFile = require('load-json-file')
-const paths = require('path')
 const glob = require('glob')
 const isEmpty = require('lodash/isEmpty')
+const S3Uploader = require('./uploaders/s3')
 
-const DEFAULT_CONFIG_PATH =  '.uploadrc'
+const DEFAULT_CONFIG_PATH = '.uploadrc'
 
-function api (cli) {
+function api(cli) {
   let failFast = true
   if (cli.flags.noFailFast) {
-    falseFast = false
+    failFast = false
   }
   const configs = loadJsonFile.sync(cli.flags.configs || DEFAULT_CONFIG_PATH)
 
@@ -16,9 +16,17 @@ function api (cli) {
     throw new Error('Should contains sources configuration')
   }
 
-  configs.sources.forEach(function (source) {
-    _uploadSource(source, configs)
-  })
+  try {
+    configs.sources.forEach(function (source) {
+      _uploadSource(source, configs)
+    })
+  } catch (err) {
+    if (failFast) {
+      throw err
+    } else {
+      console.log(err)
+    }
+  }
 }
 
 function _uploadSource(source, configs) {
@@ -35,27 +43,18 @@ function _uploadSource(source, configs) {
     throw new Error(`Distination "${source.dist}" is not found or empty.`)
   }
 
-  const includeFiles = glob.sync(source.include, { nodir: true, ignore: source.exclude })
+  const includeFiles = glob.sync(source.include, {nodir: true, ignore: source.exclude})
   const uploader = _uploader(distConfig.type || source.dist, distConfig)
 
-  try {
-    includeFiles.forEach(function(file) {
-      uploader.upload(file, source.folder)
-    })
-  } catch (e) {
-    if (failFast) {
-      throw e
-    } else {
-      console.log(e)
-    }
-  }
+  includeFiles.forEach(function (file) {
+    uploader.upload(file, source.folder)
+  })
 }
 
 function _uploader(type, options) {
   switch (type) {
     case 's3':
-      const Uploader = require('./uploaders/s3')
-      return new Uploader(options)
+      return new S3Uploader(options)
     default:
       throw new Error(`No correspond uploader "${type}"`)
   }

@@ -5,7 +5,7 @@
   "author": "Otis Chou <altispec@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "ava"
+    "test": "xo && ava"
   },
   "bin": {
     "config-upload": "bin/cli.js"
@@ -13,11 +13,16 @@
   "dependencies": {
     "aws-sdk": "^2.7.13",
     "glob": "^7.1.1",
+    "load-json-file": "^2.0.0",
     "lodash": "^4.17.2",
-    "meow": "^3.7.0",
-    "load-json-file": "^2.0.0"
+    "meow": "^3.7.0"
   },
   "devDependencies": {
-    "ava": "^0.17.0"
+    "ava": "^0.17.0",
+    "xo": "^0.17.1"
+  },
+  "xo": {
+    "space": 2,
+    "semicolon": false
   }
 }
