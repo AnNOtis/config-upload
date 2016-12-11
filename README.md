@@ -30,6 +30,77 @@ config-upload --variables '{"revision": "1.2.3"}'
 
 ## Configurations
 
+### dists
+list distination groups
+
+```json
+{
+  "dists": {
+    "group name": {
+      "uploader": "s3",
+      "bucket": "BUCKET",
+      "folder": "FOLDER"
+    }
+  }
+}
+```
+
+#### group name
+Source object described below use this name to specify a distination.
+
+#### uploader
+The way to upload. default support `s3`. If not specified, it will use group name as default.
+
+#### bucket
+Bucket's name of storage service
+
+#### folder
+folder's path
+
+### sources
+sources configurations are loaded by the defined array of hash.
+
+```json
+{
+  "sources": [
+    {
+      "dist": "s3",
+      "include": "dist/*.js",
+      "exclude": "*.test.js"
+    },
+    { ... other source object }
+  ]
+}
+```
+
+#### dist
+Group name described above.
+
+#### include
+Includes files that matching pattern. Using [glob]
+
+#### exclude
+Excludes files that matching pattern. It takes priority over `include`. Using [glob]
+
+### basic example
+```json
+{
+  "dists": {
+    "s3": {
+      "bucket": "BUCKET_NAME",
+      "folder": "PATH/TO/FOLDER"
+    },
+  },
+  "sources": [
+    {
+      "dist": "s3",
+      "include": "dist/*.js",
+      "exclude": "*.test.js"
+    },
+  ]
+}
+```
+
 ```json
 {
   "dists": {
@@ -55,3 +126,10 @@ config-upload --variables '{"revision": "1.2.3"}'
   ]
 }
 ```
+
+## TODO
+- [ ] Customizable file name of distination
+- [ ] Inject veriables from command to configurations
+- [ ] qiniu uploader
+
+[glob]: https://en.wikipedia.org/wiki/Glob_(programming)
