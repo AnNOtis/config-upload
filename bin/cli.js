@@ -12,14 +12,17 @@ const cli = meow(`
 
   -c, --configs specify configuration file path. default is .uploadrc
 
-  --variables variables for configuration
+  -x, --context context for configuration
 
   Examples
-    $ config-upload '{"revision": "v1.2.3"}'
+    $ config-upload
+
+    $ config-upload --context '{"revision": "v1.2.3"}'
 `, {
   alias: {
     n: 'no-fail-fast',
-    c: 'configs'
+    c: 'configs',
+    x: 'context'
   }
 })
 

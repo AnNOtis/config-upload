@@ -23,12 +23,12 @@ If specify, the process will not exit with failure until finish all tasks.
 #### -c, --configs [path]
 Specify configuration file path. default is `.uploadrc`.
 
-#### --variables
+#### --context
 
 example:
 
 ```sh
-config-upload --variables '{"revision": "1.2.3"}'
+config-upload --context '{"revision": "1.2.3"}'
 ```
 
 ## Configurations

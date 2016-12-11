@@ -1,7 +1,9 @@
+const path = require('path')
 const loadJsonFile = require('load-json-file')
 const glob = require('glob')
 const isEmpty = require('lodash/isEmpty')
 const S3Uploader = require('./uploaders/s3')
+const stringTemplate = require('./string-template')
 
 const DEFAULT_CONFIG_PATH = '.uploadrc'
 
@@ -10,15 +12,17 @@ function api(cli) {
   if (cli.flags.noFailFast) {
     failFast = false
   }
-  const configs = loadJsonFile.sync(cli.flags.configs || DEFAULT_CONFIG_PATH)
 
+  const configs = loadJsonFile.sync(cli.flags.configs || DEFAULT_CONFIG_PATH)
   if (!configs.sources || configs.sources.length === 0) {
     throw new Error('Should contains sources configuration')
   }
 
+  const context = Object.assign({}, JSON.parse(cli.flags.context), configs.context)
+
   try {
     configs.sources.forEach(function (source) {
-      _uploadSource(source, configs)
+      _uploadSource(source, configs, context)
     })
   } catch (err) {
     if (failFast) {
@@ -29,7 +33,7 @@ function api(cli) {
   }
 }
 
-function _uploadSource(source, configs) {
+function _uploadSource(source, configs, context) {
   if (!source.include) {
     throw new Error('"include" should not be empty.')
   }
@@ -47,7 +51,16 @@ function _uploadSource(source, configs) {
   const uploader = _uploader(distConfig.type || source.dist, distConfig)
 
   includeFiles.forEach(function (file) {
-    uploader.upload(file, source.folder)
+    const parsedPath = path.parse(file)
+    const fileContext = Object.assign({}, context, {ext: parsedPath.ext.slice(1), name: parsedPath.name})
+
+    const folder = stringTemplate(source.folder || distConfig.folder, fileContext)
+    const filename = stringTemplate(
+      source.filename || configs.filename || '[name].[ext]',
+      fileContext
+    )
+
+    uploader.upload(file, folder, filename)
   })
 }
 

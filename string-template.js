@@ -19,7 +19,10 @@ function stringTemplate(template, context) {
         throw new Error('Start with close bracket.')
       }
 
-      result += (context[tmp] || '')
+      if (!context[tmp]) {
+        throw new Error('The context "' + tmp + '" is not defined.')
+      }
+      result += context[tmp]
       start = null
       tmp = ''
     } else if (start) {

@@ -1,5 +1,4 @@
 const fs = require('fs')
-const path = require('path')
 const AWS = require('aws-sdk')
 
 const S3Uploader = function (options) {
@@ -16,14 +15,16 @@ const S3Uploader = function (options) {
   this.options = options
 }
 
-S3Uploader.prototype.upload = function (source, folder) {
-  const uploadParams = {Key: '', Body: ''}
-  const fileStream = fs.createReadStream(source)
+S3Uploader.prototype.upload = function (sourcePath, folder, distPath) {
+  const fileStream = fs.createReadStream(sourcePath)
   fileStream.on('error', function (err) {
     throw err
   })
-  uploadParams.Body = fileStream
-  uploadParams.Key = (folder || this.options.folder || '') + '/' + path.basename(source)
+
+  const uploadParams = {
+    Key: folder + '/' + distPath,
+    Body: fileStream
+  }
 
   this.uploader.upload(uploadParams, function (err, data) {
     if (err) {

@@ -25,6 +25,15 @@ test('start with close bracket', t => {
 })
 
 test('context is not an object', t => {
-  t.is(st('[foo]bar', 'string'), 'bar')
-  t.is(st('[foo]bar', 123), 'bar')
+  let error
+  error = t.throws(() => st('[foo]bar', 'string'), Error)
+  t.is(error.message, 'The context "foo" is not defined.')
+  error = t.throws(() => st('[foo]bar', 123), Error)
+  t.is(error.message, 'The context "foo" is not defined.')
+})
+
+test('specific context is not defined', t => {
+  let error
+  error = t.throws(() => st('foo[bar]', {foo: 'foo'}), Error)
+  t.is(error.message, 'The context "bar" is not defined.')
 })
