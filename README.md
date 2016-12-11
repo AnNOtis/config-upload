@@ -41,8 +41,8 @@ List distination groups.
   "dists": {
     "<group name>": {
       "uploader": "<uploader name>",
-      "bucket": "<BUCKET name>",
-      "folder": "<FOLDER path>"
+      "bucket": "<bucket name>",
+      "folder": "<folder path>"
     }
   }
 }
