@@ -1,0 +1,7 @@
+{
+  "name": "config-upload",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Otis Chou <altispec@gmail.com>",
+  "license": "MIT"
+}
