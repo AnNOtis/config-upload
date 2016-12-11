@@ -39,10 +39,10 @@ List distination groups.
 ```json
 {
   "dists": {
-    "group name": {
-      "uploader": "s3",
-      "bucket": "BUCKET",
-      "folder": "FOLDER"
+    "<group name>": {
+      "uploader": "<uploader name>",
+      "bucket": "<BUCKET name>",
+      "folder": "<FOLDER path>"
     }
   }
 }
