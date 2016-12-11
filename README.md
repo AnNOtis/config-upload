@@ -32,21 +32,21 @@ config-upload --variables '{"revision": "1.2.3"}'
 
 ```json
 {
-  "dist": {
+  "dists": {
     "s3": {
       "bucket": "SOME_BUCKET",
-      "path": "path/to/[name].[ext]"
+      "folder": "path/to/folder"
     },
     "custom dist": {
       "uploader": "s3",
       "path": "path/to/[custom_variable]/[name].[ext]"
     }
   },
-  "source": [
+  "sources": [
     {
       "dist": "s3",
       "include": "dist/*.js",
-      "exclude": "*.test.js",
+      "exclude": "*.test.js"
     },
     {
       "dist": "custom dist",

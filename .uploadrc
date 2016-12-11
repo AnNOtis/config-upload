@@ -1,0 +1,15 @@
+{
+  "dists": {
+    "s3": {
+      "bucket": "config-upload-test",
+      "folder": "path/to/folder"
+    }
+  },
+  "sources": [
+    {
+      "dist": "s3",
+      "include": "dist/*.js",
+      "exclude": "**/exclude_file.js"
+    }
+  ]
+}
