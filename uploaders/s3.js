@@ -20,15 +20,14 @@ S3Uploader.prototype.upload = function (source, folder) {
   const uploadParams = { Key: '', Body: '' }
   const fileStream = fs.createReadStream(source);
   fileStream.on('error', function(err) {
-    console.log('File Error', err);
+    throw err
   });
   uploadParams.Body = fileStream;
   uploadParams.Key = (folder || this.options.folder || '') + '/' + path.basename(source);
 
   this.uploader.upload (uploadParams, function (err, data) {
     if (err) {
-      console.log(err);
-      throw new Error("Error", err);
+      throw err
     } if (data) {
       console.log("Upload Success", data.Location);
     }

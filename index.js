@@ -6,6 +6,10 @@ const isEmpty = require('lodash/isEmpty')
 const DEFAULT_CONFIG_PATH =  '.uploadrc'
 
 function api (cli) {
+  let failFast = true
+  if (cli.flags.noFailFast) {
+    falseFast = false
+  }
   const configs = loadJsonFile.sync(cli.flags.configs || DEFAULT_CONFIG_PATH)
 
   if (!configs.sources || configs.sources.length === 0) {
@@ -34,9 +38,17 @@ function _uploadSource(source, configs) {
   const includeFiles = glob.sync(source.include, { nodir: true, ignore: source.exclude })
   const uploader = _uploader(distConfig.type || source.dist, distConfig)
 
-  includeFiles.forEach(function(file) {
-    uploader.upload(file, source.folder)
-  })
+  try {
+    includeFiles.forEach(function(file) {
+      uploader.upload(file, source.folder)
+    })
+  } catch (e) {
+    if (failFast) {
+      throw e
+    } else {
+      console.log(e)
+    }
+  }
 }
 
 function _uploader(type, options) {
