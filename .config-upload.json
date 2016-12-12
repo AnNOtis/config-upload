@@ -8,7 +8,7 @@
   "sources": [
     {
       "dist": "s3",
-      "include": "dist/*.js",
+      "include": "upload-files/*.js",
       "exclude": "**/exclude_file.js",
       "filename": "[name].[revision].[ext]"
     }
