@@ -1,10 +1,16 @@
 # config-upload
-> upload files to storages with one command.
+> 📦 Upload files to storage with only one command.
 
 ## Install
 
 ```sh
 $ yarn add dev config-upload
+```
+
+or install globally
+
+```sh
+$ yarn global add config-upload
 ```
 
 If you prefer using npm:
@@ -15,7 +21,7 @@ $ npm install --dev config-upload
 
 ## CLI
 
-```sh
+```
 $ config-upload --help
 
   Usage
@@ -67,10 +73,10 @@ Name the distination
 #### type
 Type: `String`
 
-The way to upload. If not specify, it will use dist name as default.
+The way to upload. If not specify, it will use `dist name` as default.
 
 Currently support types:
-- s3
+- `s3`
 
 #### bucket
 Type: `String`
@@ -79,27 +85,29 @@ Storage's bucket name.
 
 #### folder
 Type: `String`
-Defaut: `''`
+
+Default: `''`
 
 Folder's path.
 
 #### filename
 Type: `String`
-Defaut: `[name].[ext]`
+
+Default: `[name].[ext]`
 
 File name in storage. Default is original file name.
 
 `folder` and `filename` enable you to replace value with [name] [ext] or other injected context. For example, if uploaded file is `image1.jpg`, `folder/to/[ext]/` will replaced to `folder/to/jpg`.
 
-Provided context example:
+Provide context example:
 ```
-source file:        bird.png
-provided context:   $ config-upload --context '{"revision": "v4", "prefix": "a"}'
+command:            $ config-upload --context '{"revision": "v4", "prefix": "a"}'
+source:             "bird.png"
 folder:             "/folder/[revision]"
 filename:           "[prefix]_[name].[ext]"
-
-"/folder/v4/a_bird.png" # => file path
 ```
+
+`/folder/v4/a_bird.png` # => file path in storage
 
 ### sources
 Type: `Array<Object>`
@@ -127,7 +135,7 @@ Override folder settings.
 #### filename
 Override filename settings.
 
-## Config examples
+## Config Example
 
 ### Basic example - Upload to S3
 
@@ -212,5 +220,8 @@ $ config-upload --context "{\"revision\": \"`git rev-parse HEAD`\"}"
 
 ## TODO
 - [ ] Uploader of Qiniu.
+
+## LICENSE
+MIT
 
 [glob]: https://en.wikipedia.org/wiki/Glob_(programming)
