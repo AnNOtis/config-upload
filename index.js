@@ -5,7 +5,7 @@ const isEmpty = require('lodash/isEmpty')
 const S3Uploader = require('./uploaders/s3')
 const stringTemplate = require('./string-template')
 
-const DEFAULT_CONFIG_PATH = '.uploadrc'
+const DEFAULT_CONFIG_PATH = '.config-upload.json'
 
 function api(cli) {
   let failFast = true
@@ -13,16 +13,16 @@ function api(cli) {
     failFast = false
   }
 
-  const configs = loadJsonFile.sync(cli.flags.configs || DEFAULT_CONFIG_PATH)
-  if (!configs.sources || configs.sources.length === 0) {
+  const config = loadJsonFile.sync(cli.flags.config || DEFAULT_CONFIG_PATH)
+  if (!config.sources || config.sources.length === 0) {
     throw new Error('Should contains sources configuration')
   }
 
-  const context = Object.assign({}, JSON.parse(cli.flags.context), configs.context)
+  const context = Object.assign({}, JSON.parse(cli.flags.context), config.context)
 
   try {
-    configs.sources.forEach(function (source) {
-      _uploadSource(source, configs, context)
+    config.sources.forEach(function (source) {
+      _uploadSource(source, config, context)
     })
   } catch (err) {
     if (failFast) {
@@ -33,7 +33,7 @@ function api(cli) {
   }
 }
 
-function _uploadSource(source, configs, context) {
+function _uploadSource(source, config, context) {
   if (!source.include) {
     throw new Error('"include" should not be empty.')
   }
@@ -42,7 +42,7 @@ function _uploadSource(source, configs, context) {
     throw new Error('"include" should not be empty.')
   }
 
-  const distConfig = configs.dists[source.dist]
+  const distConfig = config.dists[source.dist]
   if (!distConfig || isEmpty(distConfig)) {
     throw new Error(`Distination "${source.dist}" is not found or empty.`)
   }
@@ -56,7 +56,7 @@ function _uploadSource(source, configs, context) {
 
     const folder = stringTemplate(source.folder || distConfig.folder, fileContext)
     const filename = stringTemplate(
-      source.filename || configs.filename || '[name].[ext]',
+      source.filename || distConfig.filename || '[name].[ext]',
       fileContext
     )
 

@@ -1,138 +1,216 @@
 # config-upload
-
-Upload file to s3 by configuration file.
+> upload files to storages with one command.
 
 ## Install
 
 ```sh
-yarn global add config-upload
+$ yarn add dev config-upload
 ```
 
-## Usage
+If you prefer using npm:
+
+```sh
+$ npm install --dev config-upload
+```
 
 ## CLI
-```sh
-$ config-upload [options]
-```
-
-### options
-
-#### -n, --no-fail-fast
-If specify, the process will not exit with failure until finish all tasks.
-
-#### -c, --configs [path]
-Specify configuration file path. default is `.uploadrc`.
-
-#### --context
-
-example:
 
 ```sh
-config-upload --context '{"revision": "1.2.3"}'
+$ config-upload --help
+
+  Usage
+    $ config-upload [options]
+
+  Options
+    --no-fail-fast Upload all files no matter what. Default will exiting on first failure.
+    --config Config file path. Default is ".config-upload.json".
+    --context Additional context provided to config.
+
+  Examples
+    $ config-upload
+    $ config-upload --config path/to/config.json
+    $ config-upload --context '{"revision": "v1.2.3"}'
 ```
 
-## Configurations
+## Config
 
-### dists
-List distination groups.
+Need to configure some options by putting it in `.config-upload.json`
 
 ```json
 {
   "dists": {
-    "<group name>": {
-      "uploader": "<uploader name>",
-      "bucket": "<bucket name>",
-      "folder": "<folder path>"
+    "dist name": {
+      "type": "s3",
+      "bucket": "bucket-name",
+      "folder": "path/to/folder",
+      "filename": "[name].[other-context].[ext]"
     }
-  }
-}
-```
-
-#### group name
-Source object described below use this name to specify a distination.
-
-#### uploader
-The way to upload. default support `s3`. If not specified, it will use group name as default.
-
-#### bucket
-Bucket's name of storage service.
-
-#### folder
-Folder's path.
-
-### sources
-Sources configurations are loaded by the defined array of hash.
-
-```json
-{
+  },
   "sources": [
     {
-      "dist": "s3",
-      "include": "dist/*.js",
-      "exclude": "*.test.js"
-    },
-    { ... other source object }
+      "dist": "dist name",
+      "include": "my-files-folder/*",
+      "exclude": "**/file_not_include",
+      "folder": "override/folder/of/dist",
+      "filename": "override_the_filename_from_dist"
+    }
   ]
 }
 ```
+### dists
+
+#### dist name
+Type: `String`
+
+Name the distination
+
+#### type
+Type: `String`
+
+The way to upload. If not specify, it will use dist name as default.
+
+Currently support types:
+- s3
+
+#### bucket
+Type: `String`
+
+Storage's bucket name.
+
+#### folder
+Type: `String`
+Defaut: `''`
+
+Folder's path.
+
+#### filename
+Type: `String`
+Defaut: `[name].[ext]`
+
+File name in storage. Default is original file name.
+
+`folder` and `filename` enable you to replace value with [name] [ext] or other injected context. For example, if uploaded file is `image1.jpg`, `folder/to/[ext]/` will replaced to `folder/to/jpg`.
+
+Provided context example:
+```
+source file:        bird.png
+provided context:   $ config-upload --context '{"revision": "v4", "prefix": "a"}'
+folder:             "/folder/[revision]"
+filename:           "[prefix]_[name].[ext]"
+
+"/folder/v4/a_bird.png" # => file path
+```
+
+### sources
+Type: `Array<Object>`
+
+Files prepared to upload by the defined array of object.
 
 #### dist
-Group name described above.
+Type: `String`
+
+An upload destination defined in the `dists` section. Specify `dist name` as it's value.
 
 #### include
+Type: `String`
+
 Includes files that matching pattern. Using [glob].
 
 #### exclude
+Type: `String`
+
 Excludes files that matching pattern. It takes priority over `include`. Using [glob].
 
-### basic example
+#### folder
+Override folder settings.
+
+#### filename
+Override filename settings.
+
+## Config examples
+
+### Basic example - Upload to S3
+
 ```json
 {
   "dists": {
     "s3": {
       "bucket": "BUCKET_NAME",
-      "folder": "PATH/TO/FOLDER"
+      "folder": "path/to/folder"
     },
   },
   "sources": [
     {
       "dist": "s3",
-      "include": "dist/*.js",
-      "exclude": "*.test.js"
+      "include": "upload_files/*"
     },
   ]
 }
 ```
 
+### Custom Distination Name - Use s3 uploader
+```json
+{
+  "dists": {
+    "my_vault": {
+      "type": "s3",
+      "bucket": "BUCKET_NAME",
+    },
+  },
+  "sources": [
+    {
+      "dist": "my_vault",
+      "include": "upload_files/*"
+    }
+  ]
+}
+```
+
+### Exclude file - Without .txt file
+
 ```json
 {
   "dists": {
     "s3": {
-      "bucket": "SOME_BUCKET",
-      "folder": "path/to/folder"
+      "bucket": "BUCKET_NAME",
     },
-    "custom dist": {
-      "uploader": "s3",
-      "path": "path/to/[custom_variable]/[name].[ext]"
-    }
   },
   "sources": [
     {
       "dist": "s3",
-      "include": "dist/*.js",
-      "exclude": "*.test.js"
+      "include": "upload_files/*",
+      "exclude": "**/*.txt"
+    }
+  ]
+}
+```
+
+### Provide context - Git revision in folder path
+
+**command:**
+```sh
+$ config-upload --context "{\"revision\": \"`git rev-parse HEAD`\"}"
+```
+
+**config:**
+```json
+{
+  "dists": {
+    "s3": {
+      "bucket": "BUCKET_NAME",
+      "folder": "folder/[revision]"
     },
+  },
+  "sources": [
     {
-      "dist": "custom dist",
-      "include": "dist/"
+      "dist": "s3",
+      "include": "upload_files/*"
     }
   ]
 }
 ```
 
 ## TODO
-- [ ] Customizable file name of distination.
-- [ ] Inject veriables from command to configurations.
 - [ ] Uploader of Qiniu.
 
 [glob]: https://en.wikipedia.org/wiki/Glob_(programming)

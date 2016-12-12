@@ -5,25 +5,21 @@ const init = require('../index')
 
 const cli = meow(`
   Usage
-    $ config-upload
+    $ config-upload [options]
 
   Options
-  -n, --no-fail-fast the process will not exit with failure until finish all tasks
-
-  -c, --configs specify configuration file path. default is .uploadrc
-
-  -x, --context context for configuration
+    --no-fail-fast Upload all files no matter what. Default will exiting on first failure.
+    --config Config file path. Default is ".config-upload.json".
+    --context Additional context provided to config.
 
   Examples
     $ config-upload
-
+    $ config-upload --config path/to/config.json
     $ config-upload --context '{"revision": "v1.2.3"}'
-`, {
-  alias: {
-    n: 'no-fail-fast',
-    c: 'configs',
-    x: 'context'
-  }
-})
+
+  Config
+    see: https://github.com/AnNOtis/config-upload
+`
+)
 
 init(cli)
