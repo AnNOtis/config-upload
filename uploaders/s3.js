@@ -6,11 +6,32 @@ const S3Uploader = function (options) {
     throw new Error('s3\'s bucket should not be empty')
   }
 
-  this.uploader = new AWS.S3({
-    params: {
-      Bucket: options.bucket
+  let authParams
+  if (options.accessKey && options.secretKey) {
+    authParams = {
+      accessKeyId: options.accessKey,
+      secretAccessKey: options.secretKey
     }
-  })
+  } else if (options.credentials) {
+    authParams = {
+      credentials: options.credentials
+    }
+  } else if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+    throw new Error(
+      'Need credentials.' +
+      'You can choose to provide a "accessKey" and a "secretKey" ' +
+      'or provide a value of "credentials".'
+    )
+  }
+
+  this.uploader = new AWS.S3(Object.assign(
+    {
+      params: {
+        Bucket: options.bucket
+      }
+    },
+    authParams
+  ))
 
   this.options = options
 }

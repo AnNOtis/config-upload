@@ -49,7 +49,9 @@ Need to configure some options by putting it in `.config-upload.json`
       "type": "s3",
       "bucket": "bucket-name",
       "folder": "path/to/folder",
-      "filename": "[name].[other-context].[ext]"
+      "filename": "[name].[other-context].[ext]",
+      "uploader info": "...",
+      "another uploader info": "..."
     }
   },
   "sources": [
@@ -144,7 +146,9 @@ Override filename settings.
   "dists": {
     "s3": {
       "bucket": "BUCKET_NAME",
-      "folder": "path/to/folder"
+      "folder": "path/to/folder",
+      "accessKey": "XXXXXXXXXXXXXXX",
+      "secretKey": "XXXXXXXXXXXXXXX"
     },
   },
   "sources": [
