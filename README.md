@@ -1,4 +1,4 @@
-# config-upload
+# config-upload [![npm](https://img.shields.io/npm/v/config-upload.svg)]()
 > 📦 Upload files to storage with only one command.
 
 ## Install
