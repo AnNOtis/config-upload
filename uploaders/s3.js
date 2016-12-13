@@ -15,14 +15,14 @@ const S3Uploader = function (options) {
   this.options = options
 }
 
-S3Uploader.prototype.upload = function (sourcePath, folder, distPath) {
+S3Uploader.prototype.upload = function (sourcePath, folder, filename) {
   const fileStream = fs.createReadStream(sourcePath)
   fileStream.on('error', function (err) {
     throw err
   })
 
   const uploadParams = {
-    Key: folder + '/' + distPath,
+    Key: folder + '/' + filename,
     Body: fileStream
   }
 

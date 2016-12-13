@@ -77,6 +77,7 @@ The way to upload. If not specify, it will use `dist name` as default.
 
 Currently support types:
 - `s3`
+- `qiniu`
 
 #### bucket
 Type: `String`
@@ -106,8 +107,7 @@ source:             "bird.png"
 folder:             "/folder/[revision]"
 filename:           "[prefix]_[name].[ext]"
 ```
-
-`/folder/v4/a_bird.png` # => file path in storage
+file path in storage: `/folder/v4/a_bird.png`
 
 ### sources
 Type: `Array<Object>`

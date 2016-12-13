@@ -3,6 +3,7 @@ const loadJsonFile = require('load-json-file')
 const glob = require('glob')
 const isEmpty = require('lodash/isEmpty')
 const S3Uploader = require('./uploaders/s3')
+const QiniuUploader = require('./uploaders/qiniu')
 const stringTemplate = require('./string-template')
 
 const DEFAULT_CONFIG_PATH = '.config-upload.json'
@@ -52,7 +53,14 @@ function _uploadSource(source, config, context) {
 
   includeFiles.forEach(function (file) {
     const parsedPath = path.parse(file)
-    const fileContext = Object.assign({}, context, {ext: parsedPath.ext.slice(1), name: parsedPath.name})
+    const fileContext = Object.assign(
+      {},
+      context,
+      {
+        ext: parsedPath.ext.slice(1),
+        name: parsedPath.name
+      }
+    )
 
     const folder = stringTemplate(source.folder || distConfig.folder, fileContext)
     const filename = stringTemplate(
@@ -68,6 +76,8 @@ function _uploader(type, options) {
   switch (type) {
     case 's3':
       return new S3Uploader(options)
+    case 'qiniu':
+      return new QiniuUploader(options)
     default:
       throw new Error(`No correspond uploader "${type}"`)
   }
