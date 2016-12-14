@@ -55,11 +55,13 @@ $ config-upload --help
     $ config-upload [options]
 
   Options
+    --init           Initialize a configuration file.
     --no-fail-fast   Upload all files no matter what. Default will exiting on first failure.
     --config         Config file path. Default is ".config-upload.json".
     --context        Additional context provided to config.
 
   Examples
+    $ config-upload --init
     $ config-upload
     $ config-upload --config path/to/config.json
     $ config-upload --context '{"revision": "v1.2.3"}'
