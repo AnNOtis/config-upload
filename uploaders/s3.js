@@ -19,8 +19,8 @@ const S3Uploader = function (options) {
   } else if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
     throw new Error(
       'Need credentials.' +
-      'You can choose to provide a "accessKey" and a "secretKey" ' +
-      'or provide a value of "credentials".'
+      'You can choose to provide "accessKey" and "secretKey" ' +
+      'or provide "credentials" file.'
     )
   }
 

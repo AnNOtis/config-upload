@@ -8,6 +8,7 @@ const cli = meow(`
     $ config-upload [options]
 
   Options
+    --init           Initialize a configuration file.
     --no-fail-fast   Upload all files no matter what. Default will exiting on first failure.
     --config         Config file path. Default is ".config-upload.json".
     --context        Additional context provided to config.

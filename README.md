@@ -19,6 +19,33 @@ If you prefer using npm:
 $ npm install --dev config-upload
 ```
 
+## Usage
+
+1. Run `config-update --init` to create a config file with prompt. Or simply putting config in `.config-upload.json`.
+
+```json
+{
+  "dists": {
+    "s3": {
+      "bucket": "my-vault",
+      "folder": "path/to/images"
+    }
+  },
+  "sources": [
+    {
+      "dist": "s3",
+      "include": "images/*",
+    }
+  ]
+}
+```
+
+2. Upload files to storage with the following command
+
+```sh
+$ config-upload
+```
+
 ## CLI
 
 ```

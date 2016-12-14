@@ -9,6 +9,10 @@ const stringTemplate = require('./string-template')
 const DEFAULT_CONFIG_PATH = '.config-upload.json'
 
 function api(cli) {
+  if (cli.flags.init) {
+    return require('./cli/init-interactive')
+  }
+
   let failFast = true
   if (cli.flags.noFailFast) {
     failFast = false
@@ -19,7 +23,9 @@ function api(cli) {
     throw new Error('Should contains sources configuration')
   }
 
-  const context = Object.assign({}, JSON.parse(cli.flags.context), config.context)
+  const context = cli.flags.context ?
+    Object.assign({}, JSON.parse(cli.flags.context), config.context) :
+    config.context
 
   try {
     config.sources.forEach(function (source) {
