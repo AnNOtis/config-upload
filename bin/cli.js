@@ -14,6 +14,7 @@ const cli = meow(`
     --context        Additional context provided to config.
 
   Examples
+    $ config-upload --init
     $ config-upload
     $ config-upload --config path/to/config.json
     $ config-upload --context '{"revision": "v1.2.3"}'

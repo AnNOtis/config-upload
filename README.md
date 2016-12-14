@@ -252,7 +252,9 @@ $ config-upload --context "{\"revision\": \"`git rev-parse HEAD`\"}"
 ```
 
 ## TODO
-- [ ] Uploader of Qiniu.
+- [ ] Support YAML format
+- [ ] AWS S3 permission group
+- [ ] More uploaders
 
 ## LICENSE
 MIT
