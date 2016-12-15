@@ -1,6 +1,5 @@
 const fs = require('fs')
 const inquirer = require('inquirer')
-const appRoot = require('app-root-path')
 
 console.log('Answer questions below will help you building a configuration file.')
 
@@ -134,7 +133,7 @@ inquirer.prompt(questions).then(function (answers) {
     sources: sources
   }
   const strigifyConfig = JSON.stringify(config, null, '  ')
-  fs.writeFileSync(appRoot + '/.config-upload.json', strigifyConfig)
+  fs.writeFileSync(process.cwd() + '/.config-upload.json', strigifyConfig)
   console.log('Following configs is being writen to ".config-upload.json":')
   console.log(strigifyConfig)
 })
